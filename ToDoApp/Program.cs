@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using ToDoApp.Data;
-using ToDoApp.Models;
 namespace ToDoApp
 {
     public class Program
