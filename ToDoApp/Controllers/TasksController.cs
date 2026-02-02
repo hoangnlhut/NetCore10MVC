@@ -77,8 +77,11 @@ namespace ToDoApp.Controllers
         // GET: Tasks/Create
         public IActionResult Create()
         {
-            return View();
+            var createViewModel = GetCreateViewModel();
+            return View(createViewModel);
         }
+
+        
 
         // POST: Tasks/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
@@ -109,7 +112,10 @@ namespace ToDoApp.Controllers
             {
                 return NotFound();
             }
-            return View(task);
+
+            var createViewModel = GetCreateViewModel(task);
+
+            return View(createViewModel);
         }
 
         // POST: Tasks/Edit/5
@@ -204,6 +210,15 @@ namespace ToDoApp.Controllers
         private bool TaskExists(int id)
         {
             return _context.Task.Any(e => e.Id == id);
+        }
+
+        private TaskCreateViewModel GetCreateViewModel(Models.Task task = null)
+        {
+            return new TaskCreateViewModel
+            {
+                Statuses = new SelectList(Enum.GetValues(typeof(StatusEnum)).Cast<StatusEnum>().Select(e => e.ToString())),
+                Task = task
+            };
         }
     }
 }
