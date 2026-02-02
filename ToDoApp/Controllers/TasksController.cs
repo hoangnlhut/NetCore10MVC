@@ -1,12 +1,15 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Build.Framework;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using ToDoApp.Data;
+using ToDoApp.Extention;
 using ToDoApp.Models;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace ToDoApp.Controllers
 {
@@ -20,28 +23,56 @@ namespace ToDoApp.Controllers
         }
 
         // GET: Tasks
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string taskStatus, string searchString)
         {
-            return View(await _context.Task.ToListAsync());
+            if (_context.Task == null)
+            {
+                return Problem("Entity set 'MvcToDoContext.Task'  is null.");
+            }
+
+            // Use LINQ to get list of genres.
+            IQueryable<StatusEnum> statusQuery = from m in _context.Task
+                                            orderby m.Status
+                                            select m.Status;
+            var tasks = from m in _context.Task
+                         select m;
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                tasks = tasks.Where(s => s.Title!.ToUpper().Contains(searchString.ToUpper()));
+            }
+
+            if (!string.IsNullOrEmpty(taskStatus) && Enum.TryParse(taskStatus, out StatusEnum myStatus))
+            {
+                tasks = tasks.Where(x => x.Status == myStatus);
+            }
+
+            var taskVM = new TaskViewModel
+            {
+                Statuses = new SelectList(await statusQuery.Distinct().ToListAsync()),
+                Tasks = await tasks.ToListAsync()
+            };
+
+            return View(taskVM);
         }
 
         // GET: Tasks/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+        //public async Task<IActionResult> Details(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            var task = await _context.Task
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (task == null)
-            {
-                return NotFound();
-            }
+        //    var task = await _context.Task
+        //        .FirstOrDefaultAsync(m => m.Id == id);
+        //    if (task == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return View(task);
-        }
+        //    return View(task);
+        //}
 
         // GET: Tasks/Create
         public IActionResult Create()
@@ -146,6 +177,27 @@ namespace ToDoApp.Controllers
             }
 
             await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> ChangeStatus(int id, int status)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var task = await _context.Task.FindAsync(id);
+                    if(task is null) return NotFound();
+
+                    task.Status = (Extention.StatusEnum)status;
+                    _context.Update(task);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    throw;
+                }
+            }
             return RedirectToAction(nameof(Index));
         }
 
