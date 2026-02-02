@@ -21,6 +21,7 @@ namespace ToDoApp.Data
                     {
                         Title = "To Do App",
                         ReleaseDate = DateTime.Parse("2026-1-29"),
+                        DueDate = DateTime.Parse("2026-1-29"),
                         Description = "Create a to do app using Blazor and EF Core",
                         Status = Extention.StatusEnum.InProgress
                     },
@@ -29,6 +30,7 @@ namespace ToDoApp.Data
                         Title = "Complete fundamental .net course",
                         Description = "Complete the .net fundamental course on Pluralsight",
                         ReleaseDate = DateTime.Parse("2026-1-29"),
+                        DueDate = DateTime.Parse("2026-1-29"),
                         Status = Extention.StatusEnum.InProgress
                     },
                     new ToDoApp.Models.Task
@@ -36,6 +38,7 @@ namespace ToDoApp.Data
                         Title = "Complete advanced .net course",
                         Description = "Complete the .net advanced course on Pluralsight",
                         ReleaseDate = DateTime.Parse("2026-1-29"),
+                        DueDate = DateTime.Parse("2026-1-29"),
                         Status = Extention.StatusEnum.InProgress
                     },
                     new ToDoApp.Models.Task
@@ -43,6 +46,7 @@ namespace ToDoApp.Data
                         Title = "Complete microservice in .net course",
                         Description = "Complete the microservice in .net course on Pluralsight",
                         ReleaseDate = DateTime.Parse("2026-1-29"),
+                        DueDate = DateTime.Parse("2026-1-29"),
                         Status = Extention.StatusEnum.InProgress
                     }
                 );
