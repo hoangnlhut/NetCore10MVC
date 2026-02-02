@@ -186,24 +186,15 @@ namespace ToDoApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> ChangeStatus(int id, int status)
+        public async Task<IActionResult> MarkAsCompleted(int id)
         {
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    var task = await _context.Task.FindAsync(id);
-                    if(task is null) return NotFound();
+            var task = await _context.Task.FindAsync(id);
+            if (task is null) return NotFound();
 
-                    task.Status = (Extention.StatusEnum)status;
-                    _context.Update(task);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    throw;
-                }
-            }
+            task.Status = Extention.StatusEnum.Completed;
+            _context.Update(task);
+            await _context.SaveChangesAsync();
+
             return RedirectToAction(nameof(Index));
         }
 

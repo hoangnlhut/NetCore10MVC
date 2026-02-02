@@ -13,6 +13,7 @@ namespace ToDoApp
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            builder.Services.AddValidation();
 
             var app = builder.Build();
 
