@@ -12,5 +12,8 @@ namespace ToDoApp.Models
         public DateTime ReleaseDate { get; set; }
         public string? Description { get; set; }
         public StatusEnum Status { get; set; }
+        [Display(Name = "Due Date")]
+        [DataType(DataType.Date)]
+        public DateTime DueDate { get; set; }
     }
 }
