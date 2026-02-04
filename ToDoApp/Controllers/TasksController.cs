@@ -32,10 +32,10 @@ namespace ToDoApp.Controllers
 
             // Use LINQ to get list of genres.
             IQueryable<StatusEnum> statusQuery = from m in _context.Task
-                                            orderby m.Status
-                                            select m.Status;
+                                                 orderby m.Status
+                                                 select m.Status;
             var tasks = from m in _context.Task
-                         select m;
+                        select m;
 
             if (!string.IsNullOrEmpty(searchString))
             {
@@ -81,7 +81,7 @@ namespace ToDoApp.Controllers
             return View(createViewModel);
         }
 
-        
+
 
         // POST: Tasks/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
