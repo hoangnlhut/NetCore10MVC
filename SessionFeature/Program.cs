@@ -6,19 +6,7 @@ namespace SessionFeature
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.AddSingleton<IMySessionStorageEngine>(services => { 
-                var path = Path.Combine(services.GetRequiredService<IHostEnvironment>().ContentRootPath, "sessions")  ;
-
-                if (!Directory.Exists(path))
-                {
-                    Directory.CreateDirectory(path);
-                }
-
-                return new FileMySessionStorageEngine(path);
-            });
-            builder.Services.AddSingleton<IMySessionStorage, MySessionStorage>();
-            builder.Services.AddScoped<MySessionScopedContainer>();
-
+            builder.Services.AddMySession();
             // Add services to the container.
             builder.Services.AddControllersWithViews();
             

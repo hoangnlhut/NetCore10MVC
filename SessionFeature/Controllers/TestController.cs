@@ -9,8 +9,8 @@ namespace SessionFeature.Controllers
             var session = HttpContext.GetSession();
             session.SetString("Name", "1234567");
 
-            var newSession = HttpContext.GetSession();
-            var value = newSession.GetString("Name");
+            session = HttpContext.GetSession();
+            var value = session.GetString("Name");
 
             if (value == "1234567")
             {
