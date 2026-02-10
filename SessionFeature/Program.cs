@@ -17,6 +17,7 @@ namespace SessionFeature
                 return new FileMySessionStorageEngine(path);
             });
             builder.Services.AddSingleton<IMySessionStorage, MySessionStorage>();
+            builder.Services.AddScoped<MySessionScopedContainer>();
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();

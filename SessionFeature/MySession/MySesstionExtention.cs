@@ -7,19 +7,28 @@ namespace SessionFeature.MySession
 
         public static ISession GetSession(this HttpContext httpContext)
         {
-            string? sessionId = httpContext.Request.Cookies[SessionIdCookieName];
-            ISession session = null!;
-            if (IsSessionIdFormatValid(sessionId))
+            var sessionContainer = httpContext.RequestServices.GetRequiredService<MySessionScopedContainer>();
+            if (sessionContainer.Session != null)
             {
-                session =  httpContext.RequestServices.GetRequiredService<IMySessionStorage>().Get(sessionId!);
+                return sessionContainer.Session;
             }
             else
             {
-                session = httpContext.RequestServices.GetRequiredService<IMySessionStorage>().Create();
-            }
+                string? sessionId = httpContext.Request.Cookies[SessionIdCookieName];
+                ISession session = null!;
+                if (IsSessionIdFormatValid(sessionId))
+                {
+                    session = httpContext.RequestServices.GetRequiredService<IMySessionStorage>().Get(sessionId!);
+                }
+                else
+                {
+                    session = httpContext.RequestServices.GetRequiredService<IMySessionStorage>().Create();
+                }
 
-            httpContext.Response.Cookies.Append(SessionIdCookieName, session.Id);
-            return session;
+                httpContext.Response.Cookies.Append(SessionIdCookieName, session.Id);
+                sessionContainer.Session = session;
+                return session;
+            }
         }
 
         private static bool IsSessionIdFormatValid(string? sessionId)
