@@ -7,8 +7,7 @@ namespace SessionFeature.MySession
         private readonly Dictionary<string, byte[]> _store = new Dictionary<string, byte[]>();
         public bool IsAvailable { 
             get { 
-                LoadAsync(CancellationToken.None).Wait();
-
+                Load();
                 return true;
             } 
         }
@@ -31,6 +30,17 @@ namespace SessionFeature.MySession
         {
            Clear();
            var loadedStore =  await engine.LoadAsync(Id, cancellationToken);
+
+            foreach (var kvp in loadedStore)
+            {
+                _store[kvp.Key] = kvp.Value;
+            }
+        }
+
+        public void Load()
+        {
+            Clear();
+            var loadedStore = engine.Load(Id);
 
             foreach (var kvp in loadedStore)
             {

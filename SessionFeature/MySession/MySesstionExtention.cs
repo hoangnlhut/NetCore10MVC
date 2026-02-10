@@ -25,7 +25,13 @@ namespace SessionFeature.MySession
                     session = httpContext.RequestServices.GetRequiredService<IMySessionStorage>().Create();
                 }
 
-                httpContext.Response.Cookies.Append(SessionIdCookieName, session.Id);
+                httpContext.Response.Cookies.Append(SessionIdCookieName, session.Id, new CookieOptions()
+                {
+                    HttpOnly = true,
+                    Secure = httpContext.Request.IsHttps,
+                    SameSite = SameSiteMode.Lax,
+                    Expires = DateTimeOffset.UtcNow.AddDays(30)
+                });
                 sessionContainer.Session = session;
                 return session;
             }

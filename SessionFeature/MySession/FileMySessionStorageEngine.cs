@@ -30,5 +30,18 @@ namespace SessionFeature.MySession
             var json = await File.ReadAllTextAsync(filePath, cancellationToken);
             return JsonSerializer.Deserialize<Dictionary<string, byte[]>>(json) ?? new Dictionary<string, byte[]>();
         }
+
+        public Dictionary<string, byte[]> Load(string id)
+        {
+            var filePath = Path.Combine(_directoryPath, id);
+
+            if (!File.Exists(filePath))
+            {
+                return new Dictionary<string, byte[]>();
+            }
+
+            var json =  File.ReadAllText(filePath);
+            return JsonSerializer.Deserialize<Dictionary<string, byte[]>>(json) ?? new Dictionary<string, byte[]>();
+        }
     }
 }
