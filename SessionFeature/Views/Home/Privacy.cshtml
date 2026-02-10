@@ -1,6 +1,13 @@
-﻿@{
-    ViewData["Title"] = "Privacy Policy";
+﻿@model string;
+
+@{
+    ViewData["Title"] = Model;
 }
 <h1>@ViewData["Title"]</h1>
 
+<div>
+    <p>
+        <b>Name:</b> @Model;
+    </p>
+</div>
 <p>Use this page to detail your site's privacy policy.</p>

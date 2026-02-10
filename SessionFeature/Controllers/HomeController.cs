@@ -1,19 +1,24 @@
-using Microsoft.AspNetCore.Mvc;
-using SessionFeature.Models;
-using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace SessionFeature.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            var session = HttpContext.GetSession();
+            session.SetString("Name", "Hoang");
+
+            await session.CommitAsync();
             return View();
         }
 
-        public IActionResult Privacy()
+        public async Task<IActionResult> PrivacyAsync()
         {
-            return View();
+            var session = HttpContext.GetSession();
+            await session.LoadAsync();
+            var name = session.GetString("Name");
+            return View("Privacy", name);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
