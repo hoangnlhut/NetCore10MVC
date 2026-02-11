@@ -34,6 +34,12 @@ namespace ConfigurationDemo.Controllers
             {
                 stringBuilder.AppendLine(provider.ToString());
             }
+            stringBuilder.AppendLine("\n----------------------------------\n");
+            stringBuilder.AppendLine("Configuration Values");
+            foreach (var kvp in _configuration.AsEnumerable())
+            {
+                stringBuilder.AppendLine($"{kvp.Key} = {kvp.Value}");
+            }
 
             return Content(stringBuilder.ToString(), "text/plain");
         }
