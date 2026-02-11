@@ -44,6 +44,16 @@ namespace ConfigurationDemo.Controllers
             return Content(stringBuilder.ToString(), "text/plain");
         }
 
+        [Route("key/{key}")]
+        public IActionResult GetValueByKey([FromRoute]string key)
+        {
+            if (string.IsNullOrEmpty(key)) return BadRequest();
+
+            var value = _configuration[key];
+
+            return string.IsNullOrEmpty(value) ? Content($"Key '{key}' not found.", "text/plain") : Content($"Key: {key}, Value: {value}", "text/plain");
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
