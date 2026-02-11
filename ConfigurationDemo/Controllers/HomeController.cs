@@ -1,11 +1,20 @@
 using ConfigurationDemo.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Text;
 
 namespace ConfigurationDemo.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly IConfigurationRoot _configuration;
+        private readonly ILogger<HomeController> _logger;
+
+        public HomeController(IConfiguration configuration, ILogger<HomeController> logger)
+        {
+            _configuration = (IConfigurationRoot)configuration;
+            _logger = logger;
+        }
         public IActionResult Index()
         {
             return View();
@@ -14,6 +23,19 @@ namespace ConfigurationDemo.Controllers
         public IActionResult Privacy()
         {
             return View();
+        }
+
+        public IActionResult Providers()
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+
+            stringBuilder.AppendLine("Configuration Providers");
+            foreach (var provider in _configuration.Providers)
+            {
+                stringBuilder.AppendLine(provider.ToString());
+            }
+
+            return Content(stringBuilder.ToString(), "text/plain");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
