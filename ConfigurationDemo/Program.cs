@@ -9,6 +9,7 @@ public class Program
         builder.Configuration.AddJsonFile("my-appsettings.json", optional: true, reloadOnChange: true);
         builder.Configuration.AddJsonFile($"my-appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true);
 
+        builder.Services.Configure<ConfigurationDemo.ConfigModels.ApiSettings>(builder.Configuration.GetSection("ApiSettings"));
 
         var host = builder.Build();
 
