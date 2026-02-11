@@ -1,6 +1,7 @@
 using ConfigurationDemo.ConfigModels;
 using ConfigurationDemo.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using System.Diagnostics;
 using System.Text;
 
@@ -10,11 +11,13 @@ namespace ConfigurationDemo.Controllers
     {
         private readonly IConfigurationRoot _configuration;
         private readonly ILogger<HomeController> _logger;
+        private readonly ApiSettings _apiSettings;
 
-        public HomeController(IConfiguration configuration, ILogger<HomeController> logger)
+        public HomeController(IOptions<ApiSettings> apiSettings, IConfiguration configuration, ILogger<HomeController> logger)
         {
             _configuration = (IConfigurationRoot)configuration;
             _logger = logger;
+            _apiSettings = apiSettings.Value;
         }
         public IActionResult Index()
         {
@@ -58,19 +61,11 @@ namespace ConfigurationDemo.Controllers
         [Route("api-settings")]
         public IActionResult GetApiSettings()
         {
-            var info = _configuration.GetSection("ApiSettings").Get<ApiSettings>();
-
-            if (info is null)
+            if (_apiSettings is null)
             {
-                throw new ArgumentNullException(nameof(info));
+                throw new ArgumentNullException(nameof(_apiSettings));
             }
-
-            StringBuilder output = new StringBuilder();
-            output.AppendLine($"Base Url: {info.BaseUrl}");
-            output.AppendLine($"Api Key: {info.ApiKey}");
-            output.AppendLine($"Api Secret: {info.ApiSecret}");
-
-            return Content(output.ToString(), "text/plain");
+            return Json(_apiSettings);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
