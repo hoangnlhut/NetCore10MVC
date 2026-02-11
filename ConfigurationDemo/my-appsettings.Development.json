@@ -6,5 +6,9 @@
     }
   },
   "FileName": "my-appsettings.Development.json",
-   "hahaha":  "1234566"
+  "ApiSettings": {
+    "BaseUrl": "https://dev.api.example.com",
+    "ApiKey": "123456789",
+    "ApiSecret": "855DBFC4-555E-4050-B5D2-353B82A42DFF"
+  }
 }

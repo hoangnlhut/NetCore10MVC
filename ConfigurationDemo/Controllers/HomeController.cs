@@ -1,3 +1,4 @@
+using ConfigurationDemo.ConfigModels;
 using ConfigurationDemo.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -52,6 +53,24 @@ namespace ConfigurationDemo.Controllers
             var value = _configuration[key];
 
             return string.IsNullOrEmpty(value) ? Content($"Key '{key}' not found.", "text/plain") : Content($"Key: {key}, Value: {value}", "text/plain");
+        }
+
+        [Route("api-settings")]
+        public IActionResult GetApiSettings()
+        {
+            var info = _configuration.GetSection("ApiSettings").Get<ApiSettings>();
+
+            if (info is null)
+            {
+                throw new ArgumentNullException(nameof(info));
+            }
+
+            StringBuilder output = new StringBuilder();
+            output.AppendLine($"Base Url: {info.BaseUrl}");
+            output.AppendLine($"Api Key: {info.ApiKey}");
+            output.AppendLine($"Api Secret: {info.ApiSecret}");
+
+            return Content(output.ToString(), "text/plain");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
