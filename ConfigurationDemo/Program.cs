@@ -6,6 +6,9 @@ public class Program
 
         // Add services to the container.
         builder.Services.AddControllersWithViews();
+        builder.Configuration.AddJsonFile("my-appsettings.json", optional: true, reloadOnChange: true);
+        builder.Configuration.AddJsonFile($"my-appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true);
+
 
         var host = builder.Build();
 

@@ -6,5 +6,7 @@
     }
   },
   "AllowedHosts": "*",
-  "FileName": "appsettings.json"
+  "FileName": "my-appsettings.json",
+  "hoang1": "setting1",
+  "hoang2": "setting2"
 }
