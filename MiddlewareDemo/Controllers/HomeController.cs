@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Mvc;
-using MiddlewareDemo.MiddlewareByHoang;
 using MiddlewareDemo.Models;
 using System.Diagnostics;
 

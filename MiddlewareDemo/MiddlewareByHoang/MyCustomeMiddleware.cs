@@ -1,9 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Globalization;
-
-namespace MiddlewareDemo.MiddlewareByHoang
+﻿namespace MiddlewareDemo.MiddlewareByHoang
 {
     public class MyCustomeMiddleware
     {

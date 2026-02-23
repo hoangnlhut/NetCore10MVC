@@ -1,8 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using MiddlewareDemo.ClientInfoRepository;
-using MiddlewareDemo.Models;
-
-namespace MiddlewareDemo.Controllers
+﻿namespace MiddlewareDemo.Controllers
 {
     public class ClientInfoController : Controller
     {
