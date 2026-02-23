@@ -1,3 +1,4 @@
+using MiddlewareDemo.ClientInfoRepository;
 using MiddlewareDemo.MiddlewareByHoang;
 using System.Globalization;
 
@@ -12,7 +13,7 @@ namespace MiddlewareDemo
             // Add services to the container.
             builder.Services.AddControllersWithViews();
             builder.Services.AddScoped<IKeyData, MemoryKeyData>();
-
+            builder.Services.AddSingleton<IClientInfoRepository, ClientInfoRepository.ClientInfoRepository>();
 
             var app = builder.Build();
 
@@ -31,7 +32,7 @@ namespace MiddlewareDemo
 
             app.UseAuthorization();
 
-            app.UseMyCustomMiddleware();
+            //app.UseMyCustomMiddleware();
 
             app.MapStaticAssets();
             app.MapControllerRoute(
