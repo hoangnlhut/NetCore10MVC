@@ -1,7 +1,3 @@
-using MiddlewareDemo.ClientInfoRepository;
-using MiddlewareDemo.MiddlewareByHoang;
-using System.Globalization;
-
 namespace MiddlewareDemo
 {
     public class Program
@@ -13,7 +9,7 @@ namespace MiddlewareDemo
             // Add services to the container.
             builder.Services.AddControllersWithViews();
             builder.Services.AddScoped<IKeyData, MemoryKeyData>();
-            builder.Services.AddSingleton<IClientInfoRepository, ClientInfoRepository.ClientInfoRepository>();
+            builder.AddClientInfo(); //add new DI service for ClientInfoRepository
 
             var app = builder.Build();
 
@@ -27,12 +23,12 @@ namespace MiddlewareDemo
 
 
             app.UseHttpsRedirection();
+            app.UseClientInfo(); // add new middleware to the pipeline
+            //app.UseMyCustomMiddleware();
 
             app.UseRouting();
 
             app.UseAuthorization();
-
-            //app.UseMyCustomMiddleware();
 
             app.MapStaticAssets();
             app.MapControllerRoute(
