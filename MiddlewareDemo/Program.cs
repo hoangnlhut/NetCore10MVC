@@ -23,7 +23,7 @@ namespace MiddlewareDemo
 
 
             app.UseHttpsRedirection();
-            app.UseClientInfo(); // add new middleware to the pipeline
+            //app.UseClientInfo(); // add new middleware to the pipeline
             //app.UseMyCustomMiddleware();
 
             app.UseRouting();
