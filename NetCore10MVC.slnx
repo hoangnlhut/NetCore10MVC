@@ -3,6 +3,7 @@
   <Project Path="HttpContextDemo/HttpContextDemo.csproj" Id="a277508c-c6a9-4c4a-8e82-d6f7bb3e9382" />
   <Project Path="MiddlewareDemo/MiddlewareDemo.csproj" Id="9a4c4faf-5d1b-473f-8599-c05c069288cc" />
   <Project Path="MySessionIntegrationTest/MySessionIntegrationTest.csproj" Id="6cb56e50-deb8-4a59-b9dd-d50b2364b611" />
+  <Project Path="SessionAspCoreDemo/SessionAspCoreDemo.csproj" Id="c5fd1fc1-97f0-4346-b805-8b9840f87761" />
   <Project Path="SessionFeature/SessionFeature.csproj" Id="2d666a6e-05de-4c20-a911-c8ac9c487528" />
   <Project Path="ToDoApp/ToDoApp.csproj" />
 </Solution>
