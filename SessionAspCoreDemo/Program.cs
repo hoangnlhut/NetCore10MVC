@@ -2,12 +2,21 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddDistributedMemoryCache();
+
+builder.Services.AddDistributedSqlServerCache((options) =>
+{
+    options.ConnectionString = builder.Configuration.GetConnectionString(
+        "DistCache_ConnectionString");
+    options.SchemaName = "dbo";
+    options.TableName = "TestCache";
+});
+
+//builder.Services.AddDistributedMemoryCache();
 
 builder.Services.AddSession(options =>
 {
     options.Cookie.Name = ".SessionDemo";
-    options.IdleTimeout = TimeSpan.FromSeconds(10);
+    options.IdleTimeout = TimeSpan.FromMinutes(20);
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
