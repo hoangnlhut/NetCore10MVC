@@ -37,7 +37,7 @@ namespace SessionFeature.Controllers
         {
             var session = HttpContext.GetSession();
             await session.LoadAsync();
-            var result =  session.GetString(key);
+            var result = session.GetString(key) ?? "No Content";
             return Ok(result);
         }
     }

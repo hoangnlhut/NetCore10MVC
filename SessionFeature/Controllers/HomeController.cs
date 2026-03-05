@@ -6,19 +6,20 @@ namespace SessionFeature.Controllers
     {
         public async Task<IActionResult> Index()
         {
-            var session = HttpContext.GetSession();
-            session.SetString("Name", "Hoang");
+            //var session = HttpContext.GetSession();
+            //session.SetString("Name", "Hoang");
 
-            await session.CommitAsync();
+            //await session.CommitAsync();
             return View();
         }
 
         public async Task<IActionResult> PrivacyAsync()
         {
-            var session = HttpContext.GetSession();
-            await session.LoadAsync();
-            var name = session.GetString("Name");
-            return View("Privacy", name);
+            //var session = HttpContext.GetSession();
+            //await session.LoadAsync();
+            //var name = session.GetString("Name");
+            //return View("Privacy", name);
+            return View("Privacy");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
