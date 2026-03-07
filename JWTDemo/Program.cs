@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Logging;
 
 namespace JWTDemo
@@ -38,6 +39,7 @@ namespace JWTDemo
                         }
                     };
                 });
+            //builder.Services.AddAuthorizationBuilder().AddPolicy("FinanceOnly", policy => policy.RequireClaim("department", "finance"));
 
             var app = builder.Build();
 
