@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.IdentityModel.JsonWebTokens;
+using Microsoft.IdentityModel.Logging;
 
 namespace OidcDemo_WebClient
 {
@@ -10,6 +11,11 @@ namespace OidcDemo_WebClient
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            if(builder.Environment.IsDevelopment())
+            {
+                IdentityModelEventSource.ShowPII = true;
+            }
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
@@ -29,7 +35,7 @@ namespace OidcDemo_WebClient
             .AddCookie(options =>
             {
                 // Optional cookie settings
-                options.Cookie.Name = "oidc_demo_cookie";
+                options.Cookie.Name = "oidc_web_client_cookie";
                 options.Cookie.HttpOnly = true;
                 options.Cookie.SameSite = Microsoft.AspNetCore.Http.SameSiteMode.Lax;
                 options.ExpireTimeSpan = TimeSpan.FromHours(1);
