@@ -1,6 +1,4 @@
-﻿using MiddlewareDemo.Models;
-
-namespace MiddlewareDemo.MiddlewareByHoang
+﻿namespace MiddlewareDemo.MiddlewareByHoang
 {
     public class MemoryKeyData : IKeyData
     {

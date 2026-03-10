@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-
-namespace MiddlewareDemo.Controllers
+﻿namespace MiddlewareDemo.Controllers
 {
     public class ClientInfoMiddlewareController : Controller
     {

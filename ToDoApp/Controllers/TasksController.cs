@@ -1,16 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.Build.Framework;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Mime;
-using System.Threading.Tasks;
 using ToDoApp.Data;
 using ToDoApp.Extention;
 using ToDoApp.Models;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace ToDoApp.Controllers
 {

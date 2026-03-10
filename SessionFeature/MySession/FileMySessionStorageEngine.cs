@@ -40,7 +40,7 @@ namespace SessionFeature.MySession
                 return new Dictionary<string, byte[]>();
             }
 
-            var json =  File.ReadAllText(filePath);
+            var json = File.ReadAllText(filePath);
             return JsonSerializer.Deserialize<Dictionary<string, byte[]>>(json) ?? new Dictionary<string, byte[]>();
         }
     }

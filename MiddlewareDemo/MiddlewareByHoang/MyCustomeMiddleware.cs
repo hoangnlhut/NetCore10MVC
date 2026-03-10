@@ -35,8 +35,8 @@
             if (getRouteValue != null && getRouteValue == "GetUserByApiKey")
             {
                 var getKeyApi = httpContext.Request.Query["keyApi"].ToString();
-                                
-                if (string.IsNullOrEmpty(getKeyApi)) 
+
+                if (string.IsNullOrEmpty(getKeyApi))
                 {
                     httpContext.Response.Redirect("/Home/Error");
                     return;

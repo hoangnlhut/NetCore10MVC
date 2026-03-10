@@ -4,7 +4,7 @@
     {
         public ClientInfo? GetClientInfo(string apiKey)
         {
-            if(_clientInfos.ContainsKey(apiKey))
+            if (_clientInfos.ContainsKey(apiKey))
             {
                 return _clientInfos[apiKey];
             }

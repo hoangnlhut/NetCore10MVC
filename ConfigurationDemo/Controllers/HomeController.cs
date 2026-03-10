@@ -49,7 +49,7 @@ namespace ConfigurationDemo.Controllers
         }
 
         [Route("key/{key}")]
-        public IActionResult GetValueByKey([FromRoute]string key)
+        public IActionResult GetValueByKey([FromRoute] string key)
         {
             if (string.IsNullOrEmpty(key)) return BadRequest();
 

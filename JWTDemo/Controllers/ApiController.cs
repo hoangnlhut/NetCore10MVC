@@ -1,6 +1,4 @@
-﻿using System.Security.Claims;
-
-namespace JWTDemo.Controllers
+﻿namespace JWTDemo.Controllers
 {
     [Authorize]
     public class ApiController : Controller

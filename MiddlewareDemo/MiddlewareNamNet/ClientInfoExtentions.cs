@@ -1,6 +1,4 @@
-﻿using MiddlewareDemo.MiddlewareByHoang;
-
-namespace MiddlewareDemo.MiddlewareNamNet
+﻿namespace MiddlewareDemo.MiddlewareNamNet
 {
     public static class ClientInfoExtentions
     {

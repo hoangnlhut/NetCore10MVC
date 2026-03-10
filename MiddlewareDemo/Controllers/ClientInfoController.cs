@@ -22,7 +22,7 @@
                 BadRequest();
             }
             var clientInfo = _repository.GetClientInfo(apiKey);
-            
+
             return clientInfo != null ? Ok(clientInfo) : Unauthorized();
         }
     }

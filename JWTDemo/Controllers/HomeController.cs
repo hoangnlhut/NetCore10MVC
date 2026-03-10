@@ -1,5 +1,4 @@
 using JWTDemo.Models;
-using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
 namespace JWTDemo.Controllers

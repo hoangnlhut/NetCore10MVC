@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.DataProtection.KeyManagement;
-using MiddlewareDemo.ClientInfoRepository;
-using MiddlewareDemo.Models;
-namespace MiddlewareDemo.MiddlewareNamNet
+﻿namespace MiddlewareDemo.MiddlewareNamNet
 {
     public class ClientInfoMiddleware
     {
@@ -13,17 +10,17 @@ namespace MiddlewareDemo.MiddlewareNamNet
             _next = next;
             _logger = logger;
 
-            _logger.LogInformation("ClientInfoMiddleware is loaded.");    
+            _logger.LogInformation("ClientInfoMiddleware is loaded.");
         }
         public async Task InvokeAsync(HttpContext context, IClientInfoRepository clientInfoRepository)
         {
-           
+
             var apiKey = context.Request.Headers["Api-Key"].FirstOrDefault();
 
             if (!string.IsNullOrEmpty(apiKey))
             {
                 var clientInfo = clientInfoRepository.GetClientInfo(apiKey);
-                if(clientInfo != null)
+                if (clientInfo != null)
                 {
                     _logger.LogInformation($"Found Api Key: {apiKey} with Client Info: {clientInfo.Name}");
                     context.Features.Set(clientInfo);

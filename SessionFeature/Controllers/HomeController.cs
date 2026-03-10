@@ -1,5 +1,3 @@
-using System.Threading.Tasks;
-
 namespace SessionFeature.Controllers
 {
     public class HomeController : Controller

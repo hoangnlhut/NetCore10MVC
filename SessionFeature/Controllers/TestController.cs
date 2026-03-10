@@ -1,8 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
-
-namespace SessionFeature.Controllers
+﻿namespace SessionFeature.Controllers
 {
     public class TestController : Controller
     {

@@ -1,4 +1,3 @@
-using MiddlewareDemo.Models;
 using System.Diagnostics;
 
 namespace MiddlewareDemo.Controllers
@@ -24,7 +23,7 @@ namespace MiddlewareDemo.Controllers
         }
 
         [Route("key")]
-        public IActionResult GetUserByApiKey([FromQuery]string keyApi)
+        public IActionResult GetUserByApiKey([FromQuery] string keyApi)
         {
             return Json(_keyData.GetApiKeyData().ToList().Find(x => x.ApiKey == keyApi));
         }

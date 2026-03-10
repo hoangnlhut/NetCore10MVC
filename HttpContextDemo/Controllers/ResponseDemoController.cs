@@ -9,8 +9,8 @@ namespace HttpContextDemo.Controllers
             return View();
         }
 
-        public IActionResult Test1() 
-        { 
+        public IActionResult Test1()
+        {
             return Content("This is a plain text response from Test1 action.");
         }
 

@@ -1,7 +1,7 @@
+using HttpContextDemo.Extentions;
 using HttpContextDemo.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using HttpContextDemo.Extentions;
 
 namespace HttpContextDemo.Controllers
 {

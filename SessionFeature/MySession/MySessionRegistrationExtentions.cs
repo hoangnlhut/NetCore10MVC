@@ -4,7 +4,8 @@
     {
         public static IServiceCollection AddMySession(this IServiceCollection services)
         {
-            services.AddSingleton<IMySessionStorageEngine>(services => {
+            services.AddSingleton<IMySessionStorageEngine>(services =>
+            {
                 var path = Path.Combine(services.GetRequiredService<IHostEnvironment>().ContentRootPath, "sessions");
 
                 if (!Directory.Exists(path))

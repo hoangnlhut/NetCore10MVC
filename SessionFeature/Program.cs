@@ -9,7 +9,7 @@ namespace SessionFeature
             builder.Services.AddMySession();
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-            
+
 
             var app = builder.Build();
 

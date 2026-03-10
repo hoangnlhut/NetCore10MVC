@@ -1,6 +1,4 @@
-﻿using MiddlewareDemo.Models;
-
-namespace MiddlewareDemo.ClientInfoRepository
+﻿namespace MiddlewareDemo.ClientInfoRepository
 {
     public interface IClientInfoRepository
     {
