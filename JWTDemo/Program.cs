@@ -1,10 +1,13 @@
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Logging;
+using System.Globalization;
 
 namespace JWTDemo
 {
     public class Program
     {
+        private static IFormatProvider? enUs = new CultureInfo("en-Us");
+
         public static void Main(string[] args)
         {
             IdentityModelEventSource.ShowPII = true;
@@ -39,7 +42,24 @@ namespace JWTDemo
                         }
                     };
                 });
-            //builder.Services.AddAuthorizationBuilder().AddPolicy("FinanceOnly", policy => policy.RequireClaim("department", "finance"));
+
+            builder.Services.AddAuthorization(options =>
+            { 
+                options.AddPolicy("FinanceOnly", policy => policy.RequireClaim("department", "finance"));
+                //a policy that requires some roles and claims
+                options.AddPolicy("PolicyBoth12AndSomeClaims", policy => policy.RequireRole("Role1").RequireRole("Role2")
+                .RequireClaim("client-id","client1", "client2")
+                .RequireUserName("Nguyen Van A")
+                .RequireClaim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/dateofbirth")
+                .RequireAssertion(context => context.User.Identity?.Name?.Contains("Nguyen ", StringComparison.InvariantCultureIgnoreCase) ?? false)
+                .RequireAssertion(context => 
+                  DateTime.TryParseExact(context.User.Claims.Where(c => c.Type =="http://schemas.xmlsoap.org/ws/2005/05/identity/claims/dateofbirth").Select(x => x.Value).FirstOrDefault(), "yyyy-MM-dd", enUs, DateTimeStyles.None, out var dob) 
+                  && dob.Year < 2000)
+                );
+                
+                options.AddPolicy("Policy3Or4", policy => policy.RequireRole("Role3","Role4"));
+            });
+
 
             var app = builder.Build();
 
