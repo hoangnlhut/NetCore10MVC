@@ -56,46 +56,18 @@ namespace OidcDemo_OidcServer.Controllers
                 return View("UserNotFound");
             }
 
-            //var client = authorizationClientService.FindById(authenticateRequest.ClientId);
-            //if (client == null)
-            //{
-            //    return BadRequest("Invalid client_id");
-            //}
+            // creat authentication code
+            var code = GenerateAuthenticationCode();
 
-            //if (client.RedirectUri != authenticateRequest.RedirectUri)
-            //{
-            //    return BadRequest("Invalid redirect_uri");
-            //}
+            // save authentication code to storage
 
-            //string code = GenerateAuthenticationCode();
-            //if (!codeStorage.TryAddCode(code, new CodeStorageValue()
-            //{
-            //    Code = code,
-            //    ClientId = authenticateRequest.ClientId,
-            //    OriginalRedirectUri = authenticateRequest.RedirectUri,
-            //    ExpiryTime = DateTime.Now.AddSeconds(CodeResponseValidSeconds),
-            //    Nonce = authenticateRequest.Nonce,
-            //    User = user,
-            //    Scope = authenticateRequest.Scope
-            //}
-            //))
-            //{
-            //    throw new Exception("Error storing code");
-            //}
 
-            //var codeFlowModel = BuildCodeFlowResponseModel(authenticateRequest, code);
-
-            //string viewName = "SubmitForm"; // we can change to another view if we need to support response_modes other than form_post
-
-            //logger.LogInformation("New authentication code issued: {c}", code);
-
-            //return View(viewName, new CodeFlowResponseViewModel()
-            //{
-            //    Code = codeFlowModel.Code,
-            //    RedirectUri = authenticateRequest.RedirectUri,
-            //    State = codeFlowModel.State,
-            //});
-            return View();
+            return View("SubmitForm", model: new CodeFlowResponseViewModel()
+            {
+                Code = code,
+                RedirectUri = authenticateRequest.RedirectUri,
+                State = authenticateRequest.State
+            });
         }
 
         private static void ValidateAuthenticateRequestModel(AuthenticationRequestModel authenticateRequest)
