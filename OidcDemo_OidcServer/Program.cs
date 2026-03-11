@@ -24,6 +24,10 @@ namespace OidcDemo_OidcServer
 
             app.UseAuthorization();
 
+            app.MapGet("/.well-known/openid-configuration", () => Results.File(Path.Combine(builder.Environment.ContentRootPath, "OidcDiscovery", "openid-configuration.json"), contentType: "application/json"));
+
+            app.MapGet("/.well-known/jwks.json", () => Results.File(Path.Combine(builder.Environment.ContentRootPath, "OidcDiscovery", "jwks.json"), contentType: "application/json"));
+
             app.MapStaticAssets();
             app.MapControllerRoute(
                 name: "default",
