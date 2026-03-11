@@ -10,4 +10,3 @@ namespace OidcDemo_OidcServer.Models
         public required string State { get; set; }
     }
 }
-}

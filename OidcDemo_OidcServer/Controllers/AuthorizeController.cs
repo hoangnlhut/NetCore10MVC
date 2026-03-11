@@ -7,33 +7,19 @@ namespace OidcDemo_OidcServer.Controllers
 {
     public class AuthorizeController : Controller
     {
-        public const int TokenResponseValidSeconds = 1200;
-        public const int CodeResponseValidSeconds = 60 * 5;
+        private static Random random = new Random();
 
         private readonly ILogger<AuthorizeController> logger;
         private readonly IUserRepository _userRepository;
-        //private readonly TokenIssuingOptions tokenIssuingOptions;
-        //private readonly JsonWebKey jsonWebKey;
-        //private readonly ICodeStorage codeStorage;
-        //private readonly IRefreshTokenStorageFactory refreshTokenStorageFactory;
-        //private readonly IAuthorizationClientService authorizationClientService;
+        private readonly ICodeItemRepository _codeItemRepository;
 
         public AuthorizeController(
-            //TokenIssuingOptions tokenIssuingOptions,
-            //JsonWebKey jsonWebKey,
-            //ICodeStorage codeStorage,
-            //IRefreshTokenStorageFactory refreshTokenStorageFactory,
-            //IAuthorizationClientService authorizationClientService,
             IUserRepository userRepository,
+            ICodeItemRepository codeItemRepository,
             ILogger<AuthorizeController> logger)
         {
-            //this.tokenIssuingOptions = tokenIssuingOptions;
-            //this.jsonWebKey = jsonWebKey;
-            //this.codeStorage = codeStorage;
-            //this.refreshTokenStorageFactory = refreshTokenStorageFactory;
-            //this.authorizationClientService = authorizationClientService;
-
             _userRepository = userRepository;
+            _codeItemRepository = codeItemRepository;
             this.logger = logger;
         }
 
@@ -57,9 +43,15 @@ namespace OidcDemo_OidcServer.Controllers
             }
 
             // creat authentication code
-            var code = GenerateAuthenticationCode();
+            var code = GenerateCode();
 
             // save authentication code to storage
+            _codeItemRepository.Add(code, new CodeItem()
+            {
+                requestModel = authenticateRequest,
+                user = user,
+                scopes = scopes
+            });
 
 
             return View("SubmitForm", model: new CodeFlowResponseViewModel()
@@ -94,9 +86,17 @@ namespace OidcDemo_OidcServer.Controllers
                 throw new Exception("redirect_uri required");
             }
         }
-        private static string GenerateAuthenticationCode()
+
+        
+        private static string GenerateCode()
         {
-            return Guid.NewGuid().ToString("N");
+            const string alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            
+            return new string(Enumerable.Repeat(alphabet, 32)
+                .Select(s => s[random.Next(s.Length)])
+                .ToArray());
         }
+
+
     }
 }
