@@ -1,8 +1,9 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Logging;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using Microsoft.IdentityModel.Tokens;
 
 namespace OidcDemo_WebClient
 {
@@ -31,6 +32,7 @@ namespace OidcDemo_WebClient
             {
                 options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             })
             .AddCookie(options =>
             {
@@ -40,26 +42,26 @@ namespace OidcDemo_WebClient
                 options.Cookie.SameSite = Microsoft.AspNetCore.Http.SameSiteMode.Lax;
                 options.ExpireTimeSpan = TimeSpan.FromHours(1);
             })
-            .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
+            .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, openIdOptions =>
             {
                 // Basic settings
-                options.Authority = authority;
-                options.ClientId = clientId;
-                options.ClientSecret = clientSecret;
-                options.ResponseType = OpenIdConnectResponseType.Code;
-                options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.SaveTokens = true; // Persist tokens in authentication session
-                options.GetClaimsFromUserInfoEndpoint = true;
-                options.MapInboundClaims = false;
-
-                options.TokenValidationParameters.NameClaimType = JwtRegisteredClaimNames.Name;
-                options.TokenValidationParameters.RoleClaimType = "roles";
+                openIdOptions.Authority = authority;
+                openIdOptions.ClientId = clientId;
+                openIdOptions.ClientSecret = clientSecret;
+                openIdOptions.ResponseType = OpenIdConnectResponseType.Code;
+                openIdOptions.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                openIdOptions.SaveTokens = true; // Persist tokens in authentication session
+                openIdOptions.GetClaimsFromUserInfoEndpoint = true;
+                openIdOptions.MapInboundClaims = false;
+                
+                openIdOptions.TokenValidationParameters.NameClaimType = Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames.Name;
+                openIdOptions.TokenValidationParameters.RoleClaimType = "roles";
 
                 // Scopes
-                options.Scope.Clear();
-                options.Scope.Add("openid");
-                options.Scope.Add("profile");
-                options.Scope.Add("email");
+                openIdOptions.Scope.Clear();
+                openIdOptions.Scope.Add("openid");
+                openIdOptions.Scope.Add("profile");
+                openIdOptions.Scope.Add("email");
                 if (!string.IsNullOrWhiteSpace(extraScopes))
                 {
                     foreach (var s in extraScopes.Split(' ', StringSplitOptions.RemoveEmptyEntries))
@@ -68,19 +70,57 @@ namespace OidcDemo_WebClient
                             !string.Equals(s, "profile", StringComparison.OrdinalIgnoreCase) &&
                             !string.Equals(s, "email", StringComparison.OrdinalIgnoreCase))
                         {
-                            options.Scope.Add(s);
+                            openIdOptions.Scope.Add(s);
                         }
                     }
                 }
                 // offline_access to enable refresh tokens if supported
-                if (!options.Scope.Contains("offline_access"))
+                if (!openIdOptions.Scope.Contains("offline_access"))
                 {
-                    options.Scope.Add("offline_access");
+                    openIdOptions.Scope.Add("offline_access");
                 }
 
+                openIdOptions.TokenValidationParameters.ValidateIssuerSigningKey = false;
+                openIdOptions.TokenValidationParameters.SignatureValidator = delegate (string token, TokenValidationParameters validationParameters)
+                {
+                    return new Microsoft.IdentityModel.JsonWebTokens.JsonWebToken(token);
+                };
+
+                //openIdOptions.TokenValidationParameters.ValidIssuer = authority;
+                //openIdOptions.TokenValidationParameters.ValidAudience = clientId;
+                //openIdOptions.TokenValidationParameters.ValidAlgorithms = new[] { "RS256" };
+                //openIdOptions.TokenValidationParameters.IssuerSigningKey = JwkLoader.LoadFromPublic();
+
+                openIdOptions.Events.OnAuthorizationCodeReceived = (context) =>
+                {
+                    Console.WriteLine($"authorization_code: {context.ProtocolMessage.Code}");
+
+                    return Task.CompletedTask;
+                };
+
+                openIdOptions.Events.OnTokenResponseReceived = (context) =>
+                {
+                    Console.WriteLine($"OnTokenResponseReceived.access_token: {context.TokenEndpointResponse.AccessToken}");
+                    Console.WriteLine($"OnTokenResponseReceived.refresh_token: {context.TokenEndpointResponse.RefreshToken}");
+
+                    return Task.CompletedTask;
+                };
+
+                openIdOptions.Events.OnTokenValidated = (context) =>
+                {
+                    Console.WriteLine($"OnTokenValidated.access_token: {context.TokenEndpointResponse?.AccessToken}");
+                    Console.WriteLine($"OnTokenValidated.refresh_token: {context.TokenEndpointResponse?.RefreshToken}");
+
+                    return Task.CompletedTask;
+                };
+
+                openIdOptions.Events.OnTicketReceived = (context) =>
+                {
+                    return Task.CompletedTask;
+                };
 
                 // Optional: events for logging or custom behavior
-                options.Events = new OpenIdConnectEvents
+                openIdOptions.Events = new OpenIdConnectEvents
                 {
                     OnRemoteFailure = ctx =>
                     {
@@ -94,12 +134,15 @@ namespace OidcDemo_WebClient
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Home/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
+            }
+            else
+            {
+                app.UseDeveloperExceptionPage();
             }
 
             app.UseHttpsRedirection();
@@ -109,11 +152,9 @@ namespace OidcDemo_WebClient
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.MapStaticAssets();
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}")
-                .WithStaticAssets();
+                pattern: "{controller=Home}/{action=Index}/{id?}");
 
             app.Run();
         }

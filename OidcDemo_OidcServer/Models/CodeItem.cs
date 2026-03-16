@@ -2,8 +2,8 @@
 {
     public class CodeItem
     {
-        public AuthenticationRequestModel requestModel { get; set; }
-        public string user { get; set; }
-        public string[] scopes { get; set; }
+        public AuthenticationRequestModel RequestModel { get; set; }
+        public string User { get; set; }
+        public string[] Scopes { get; set; }
     }
 }

@@ -1,11 +1,10 @@
 ﻿using OidcDemo_OidcServer.Models;
-using System.Collections;
 
 namespace OidcDemo_OidcServer.Repository
 {
     public class InMemoryCodeItemRepository : ICodeItemRepository
     {
-        private readonly Dictionary<string, CodeItem> _list = []; 
+        private readonly Dictionary<string, CodeItem> _list = [];
         public void Add(string code, CodeItem item)
         {
             _list.Add(code, item);

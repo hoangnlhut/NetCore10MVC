@@ -5,8 +5,6 @@
   <Project Path="JWTDemo/JWTDemo.csproj" Id="4adabc8a-c5f9-45cc-a936-35440bc43343" />
   <Project Path="MiddlewareDemo/MiddlewareDemo.csproj" Id="9a4c4faf-5d1b-473f-8599-c05c069288cc" />
   <Project Path="MySessionIntegrationTest/MySessionIntegrationTest.csproj" Id="6cb56e50-deb8-4a59-b9dd-d50b2364b611" />
-  <Project Path="OidcDemo_OidcServer/OidcDemo_OidcServer.csproj" Id="f96f2bca-b011-4ee2-9fc5-94b21f0f4b37" />
-  <Project Path="OidcDemo_WebClient/OidcDemo_WebClient.csproj" Id="9b5da6c4-88ee-49d7-9668-e54d469cf18d" />
   <Project Path="SessionAspCoreDemo/SessionAspCoreDemo.csproj" Id="c5fd1fc1-97f0-4346-b805-8b9840f87761" />
   <Project Path="SessionFeature/SessionFeature.csproj" Id="2d666a6e-05de-4c20-a911-c8ac9c487528" />
   <Project Path="ToDoApp/ToDoApp.csproj" />
