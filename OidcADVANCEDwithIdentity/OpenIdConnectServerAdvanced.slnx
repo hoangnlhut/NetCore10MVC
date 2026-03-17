@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="Client/Client.csproj" Id="c1565812-a6fd-4366-a3d6-8080e54a35cf" />
+  <Project Path="OidcServer/OidcServer.csproj" Id="91e17f96-502a-44d2-9438-417793878cbb" />
+  <Project Path="Resource/Resource.csproj" Id="2d67b3d1-7772-42f7-9919-8fdece2da23a" />
+</Solution>
