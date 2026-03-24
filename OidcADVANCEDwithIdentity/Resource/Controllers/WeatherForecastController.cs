@@ -38,6 +38,12 @@ namespace Resource.Controllers
         [Authorize()]
         public IEnumerable<WeatherForecast> GetDetailed()
         {
+            var accessTokenClaim = User.Claims.Where(c => c.Type == "access_token").FirstOrDefault();
+            if (accessTokenClaim != null)
+            {
+                _logger.LogInformation($"GetDetailedWeatherForecast - access token from User.Claims: {accessTokenClaim.Value}");
+            }
+
             return Enumerable.Range(1, 10).Select(index => new WeatherForecast
             {
                 Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
