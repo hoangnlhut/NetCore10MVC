@@ -1,61 +1,31 @@
+using Client.Data;
+using Client.Helpers;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Logging;
-
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 namespace Client
 {
     public class Program
     {
         public static void Main(string[] args)
         {
-            //var builder = WebApplication.CreateBuilder(args);
-
-            //// Add services to the container.
-            //builder.Services.AddControllersWithViews();
-
-            //var app = builder.Build();
-
-            //// Configure the HTTP request pipeline.
-            //if (!app.Environment.IsDevelopment())
-            //{
-            //    app.UseExceptionHandler("/Home/Error");
-            //    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-            //    app.UseHsts();
-            //}
-
-            //app.UseHttpsRedirection();
-            //app.UseStaticFiles();
-
-            //app.UseRouting();
-
-            //app.UseAuthorization();
-
-            //app.MapControllerRoute(
-            //    name: "default",
-            //    pattern: "{controller=Home}/{action=Index}/{id?}");
-
-            //app.Run();
-
             IdentityModelEventSource.ShowPII = true; // enable detailed logs
 
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-            builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(connectionString));
+            var connectionString = builder.Configuration.GetConnectionString("ApplicationDbContextConnection") ?? throw new InvalidOperationException("Connection string 'c' not found.");
+
+            builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
+            builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ApplicationDbContext>();
 
             var options = builder.Configuration.GetSection("OpenIdConnect").Get<ClientOptions>() ?? throw new Exception("Could not get ClientOptions");
 
-            builder.Services.AddDefaultIdentity<IdentityUser>(
-                options => options.SignIn.RequireConfirmedAccount = true
-                )
-                .AddEntityFrameworkStores<ApplicationDbContext>();
-
-            builder.Services.AddAuthentication(options =>
-            {
-            })
-                .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, openIdOptions =>
+            builder.Services.AddAuthentication(options => { })
+            .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, openIdOptions =>
                 {
                     openIdOptions.ClientId = options.ClientId;
                     openIdOptions.Authority = options.Issuer;
@@ -77,11 +47,11 @@ namespace Client
                     openIdOptions.TokenValidationParameters.IssuerSigningKey = JwkLoader.LoadFromPublic();
 
                     openIdOptions.Events.OnAuthorizationCodeReceived = (context) =>
-                    {
-                        Console.WriteLine($"authorization_code: {context.ProtocolMessage.Code}");
+                {
+                    Console.WriteLine($"authorization_code: {context.ProtocolMessage.Code}");
 
-                        return Task.CompletedTask;
-                    };
+                    return Task.CompletedTask;
+                };
 
                     openIdOptions.Events.OnTokenResponseReceived = (context) =>
                     {
@@ -106,22 +76,23 @@ namespace Client
 
                 });
 
+
+            // Add services to the container.
             builder.Services.AddHttpClient();
             builder.Services.AddControllersWithViews();
-
 
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseMigrationsEndPoint();
-            }
-            else
+            if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Home/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
+            }
+            else
+            {
+                app.UseMigrationsEndPoint();
             }
 
             app.UseHttpsRedirection();
@@ -130,9 +101,11 @@ namespace Client
             app.UseAuthorization();
             app.UseStaticFiles();
 
+
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
+
             app.MapRazorPages();
 
             app.Run();

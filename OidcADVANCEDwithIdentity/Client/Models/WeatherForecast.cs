@@ -1,4 +1,4 @@
-﻿namespace Client.Controllers
+﻿namespace Client.Models
 {
     public class WeatherForecast
     {
