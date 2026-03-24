@@ -6,4 +6,17 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Content Include="oidc-assets\.private\default-jwk.json" />
+    <Content Include="oidc-assets\.private\public-jwk.json" />
+    <Content Include="oidc-assets\.well-known\jwks.json" />
+    <Content Include="oidc-assets\.well-known\openid-configuration.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="8.16.0" />
+    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.16.0" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.16.0" />
+  </ItemGroup>
+
 </Project>
