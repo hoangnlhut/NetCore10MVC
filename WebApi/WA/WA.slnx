@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="../IntegrationTest/IntegrationTest.csproj" Id="aa6f3da6-885e-42ec-8e89-74c8cc562b96" />
+  <Project Path="../RepositoryTest/RepositoryTest.csproj" Id="2441fed1-2a1a-4b7a-8485-d94acb8b34ec" />
+  <Project Path="../ToDoRepository.SqlServer/ToDoRepository.SqlServer.csproj" Id="7cfb9652-a0b2-4760-8fdf-7ca62efb2fed" />
+  <Project Path="../ToDoRepository.Abstraction/ToDoRepository.Abstraction.csproj" Id="8efa3d7a-2841-483a-9e68-a5fc377d83e0" />
+  <Project Path="WA.csproj" />
+</Solution>
