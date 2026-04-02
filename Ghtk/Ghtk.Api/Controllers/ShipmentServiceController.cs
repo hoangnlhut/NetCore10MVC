@@ -1,4 +1,5 @@
 ﻿using Ghtk.Api.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ghtk.Api.Controllers
@@ -15,6 +16,7 @@ namespace Ghtk.Api.Controllers
 
         [HttpPost]
         [Route("order")]
+        [Authorize]
         public async Task<IActionResult> CreateOrder([FromBody] OrderShipmentInput orderShipment)
         {
             return Ok();
