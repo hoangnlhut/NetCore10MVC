@@ -1,1 +1,3 @@
-<Solution />
+<Solution>
+  <Project Path="Ghtk.Api/Ghtk.Api.csproj" />
+</Solution>
