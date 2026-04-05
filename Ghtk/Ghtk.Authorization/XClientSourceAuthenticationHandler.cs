@@ -1,7 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Principal;
+using System.Text;
 using System.Text.Encodings.Web;
 
 namespace Ghtk.Authorization
@@ -15,22 +20,69 @@ namespace Ghtk.Authorization
         protected override Task<AuthenticateResult> HandleAuthenticateAsync()
         {
             var clientSource = Request.Headers["X-Client-Source"].FirstOrDefault();
-            if (string.IsNullOrEmpty(clientSource))
+            var token = Request.Headers["Token"].FirstOrDefault();
+
+            if (!string.IsNullOrEmpty(clientSource) && !string.IsNullOrEmpty(token)
+                && VerifyClient(clientSource, token,out var principal))
             {
-                return Task.FromResult(AuthenticateResult.Fail("Missing X-Client-Source header"));
+                //var identity = new ClaimsIdentity(Scheme.Name);
+                //identity.AddClaim(new Claim(ClaimTypes.Name, clientSource!));
+                //var principal = new ClaimsPrincipal(identity);
+                var ticket = new AuthenticationTicket(principal, Scheme.Name);
+
+                return Task.FromResult(AuthenticateResult.Success(ticket));
+            }
+            else
+            {
+                return Task.FromResult(AuthenticateResult.Fail("Invalid verify"));
+            }
+        }
+
+        private bool VerifyClient(string clientSource, string tokenValue, out ClaimsPrincipal? principle)
+        {
+            //validate token
+            if (!VerifyJwtToken(tokenValue, out var token, out principle))
+            {
+                return false;
             }
 
-            if(!Options.ValidateClientSource(clientSource))
+            if (clientSource != (token as JwtSecurityToken)!.Subject)
             {
-                return Task.FromResult(AuthenticateResult.Fail("Invalid X-Client-Source header"));
+                return false;
             }
 
-            var identity = new ClaimsIdentity(Scheme.Name);
-            identity.AddClaim(new Claim(ClaimTypes.Name, clientSource));
-            var principal = new ClaimsPrincipal(identity);
-            var ticket = new AuthenticationTicket(principal, Scheme.Name);
+            if (!Options.ValidateClientSource(clientSource, token!, principle!))
+            {
+                return false;
+            }
 
-            return Task.FromResult(AuthenticateResult.Success(ticket));
+            return true;
+        }
+
+        private bool VerifyJwtToken(string tokenValue, out SecurityToken? token, out ClaimsPrincipal? principle)
+        {
+            var handler = new JwtSecurityTokenHandler();
+            var validationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Options.IssueSigningKey)),
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                ValidateLifetime = true,
+                ClockSkew = TimeSpan.Zero,
+                RequireExpirationTime = true
+            };
+            try
+            {
+                principle = handler.ValidateToken(tokenValue, validationParameters, out token);
+                return true;
+            }
+            catch(Exception)
+            {
+                token = null;
+                principle = null;   
+                return false;
+            }
         }
     }
 }
