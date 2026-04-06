@@ -1,4 +1,6 @@
 <Solution>
+  <Project Path="ClientAuthentication.Api/ClientAuthentication.Api.csproj" />
+  <Project Path="ClientAuthentication/ClientAuthentication.csproj" />
   <Project Path="Ghtk.Api/Ghtk.Api.csproj" />
   <Project Path="Ghtk.Authorization/Ghtk.Authorization.csproj" />
 </Solution>

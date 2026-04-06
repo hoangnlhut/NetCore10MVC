@@ -1,3 +1,4 @@
+using Ghtk.Api.AuthenticationHandler;
 using Ghtk.Authorization;
 
 namespace Ghtk.Api
@@ -8,17 +9,17 @@ namespace Ghtk.Api
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            var remoteAuthenServiceUrl = builder.Configuration["RemoteAuthenticationUrl"] ?? throw new Exception("missing IssueSigningKey configuration");
+            var remoteAuthenticationService = new RemoteAuthenticationHandler(remoteAuthenServiceUrl);
+
             // Add services to the container.
 
             builder.Services.AddControllers();
             builder.Services.AddAuthentication("X-Client-Source").AddXClientSourceAuthentication(
                 options =>
                 {
-                    options.ValidateClientSource = clientSource =>
-                    {
-                        var allowedSources = new[] { "MobileApp", "WebApp", "ThirdParty" };
-                        return allowedSources.Contains(clientSource);
-                    };
+                    options.ValidateClientSource = (clientSource, token, principle) => remoteAuthenticationService.Validate(clientSource);
+                    options.IssueSigningKey = builder.Configuration["IssueSigningKey"] ?? throw new Exception("missing IssueSigningKey configuration");
                 }
             );
 
