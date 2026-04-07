@@ -13,7 +13,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Ghtk.Authorization\Ghtk.Authorization.csproj" />
     <ProjectReference Include="..\GhtkRepository.Abstration\GhtkRepository.Abstration.csproj" />
-    <ProjectReference Include="..\GhtkRepository.SqlServer\GhtkRepository.MongoDb.csproj" />
+    <ProjectReference Include="..\GhtkRepository.MongoDB\GhtkRepository.MongoDb.csproj" />
   </ItemGroup>
 
 </Project>
