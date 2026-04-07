@@ -1,5 +1,6 @@
 using Ghtk.Api.AuthenticationHandler;
 using Ghtk.Authorization;
+using GhtkRepository;
 
 namespace Ghtk.Api
 {
@@ -22,6 +23,8 @@ namespace Ghtk.Api
                     options.IssueSigningKey = builder.Configuration["IssueSigningKey"] ?? throw new Exception("missing IssueSigningKey configuration");
                 }
             );
+            builder.Services.AddMongoDbClient(builder.Configuration);
+            builder.Services.AddScoped<IOrderRepository, MongoDbOrderRepository>();
 
             var app = builder.Build();
 

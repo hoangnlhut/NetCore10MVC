@@ -61,7 +61,7 @@
         public int IsFreeship { get; set; }
 
         [JsonPropertyName("pick_date")]
-        public DateTimeOffset PickDate { get; set; }
+        public string PickDate { get; set; }
 
         [JsonPropertyName("pick_money")]
         public long PickMoney { get; set; }
@@ -82,7 +82,7 @@
         public List<GamSolution> GamSolutions { get; set; } = [];
     }
 
-    public  class GamSolution
+    public class GamSolution
     {
         [JsonPropertyName("solution_id")]
         public long SolutionId { get; set; }

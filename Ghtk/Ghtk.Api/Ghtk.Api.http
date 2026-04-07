@@ -1,6 +1,4 @@
-@Ghtk.Api_HostAddress = http://localhost:5212
+@Ghtk.Api_HostAddress = https://localhost:7026
 
-GET {{Ghtk.Api_HostAddress}}/weatherforecast/
-Accept: application/json
-
+###
 ###

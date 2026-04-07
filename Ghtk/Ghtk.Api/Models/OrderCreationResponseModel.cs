@@ -27,7 +27,7 @@ namespace Ghtk.Api.Models
         public string? InsuranceFee { get; set; }
 
         [JsonPropertyName("tracking_id")]
-        public long TrackingId { get; set; } = default!;
+        public string TrackingId { get; set; } = default!;
 
         [JsonPropertyName("estimated_pick_time")]
         public string EstimatedPickTime { get; set; } = default!;

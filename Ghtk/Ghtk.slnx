@@ -3,4 +3,6 @@
   <Project Path="ClientAuthentication/ClientAuthentication.csproj" />
   <Project Path="Ghtk.Api/Ghtk.Api.csproj" />
   <Project Path="Ghtk.Authorization/Ghtk.Authorization.csproj" />
+  <Project Path="GhtkRepository.Abstration/GhtkRepository.Abstration.csproj" />
+  <Project Path="GhtkRepository.SqlServer/GhtkRepository.MongoDb.csproj" />
 </Solution>
